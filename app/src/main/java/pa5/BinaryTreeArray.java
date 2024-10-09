@@ -68,10 +68,7 @@ public class BinaryTreeArray implements ArrayBasedBinaryTree{
 		arr.add(element);
 		int idx = arr.size() - 1;
 		while (arr.get((idx-1)/2) > element) {
-			
-			int tmp = arr.get(idx);
-			arr.set(idx, arr.get((idx-1)/2));
-			arr.set((idx-1)/2, tmp);
+			swap(idx, (idx-1) /2);
 			idx = (idx-1)/2;
 		}
 		
@@ -111,7 +108,6 @@ public class BinaryTreeArray implements ArrayBasedBinaryTree{
 
 	@Override
 	public String postOrder() {
-		// TODO Auto-generated method stub
 		return postOrder(0);
 	}
 	
@@ -123,6 +119,8 @@ public class BinaryTreeArray implements ArrayBasedBinaryTree{
 
 	@Override
 	public int longestPath() {
+		if (arr.size()==0)
+			return 0;
 		return (int) (Math.log(arr.size())/Math.log(2)) + 1;
 	}
 
@@ -137,6 +135,14 @@ public class BinaryTreeArray implements ArrayBasedBinaryTree{
 					
 		arr.set(i, arr.get(arr.size()-1));
 		arr.remove(arr.size()-1);
+		if (i == arr.size())
+			return;
+		int val = arr.get(i);
+		while (arr.get((i-1)/2) > val) {
+			swap(i, (i-1) / 2);
+			i = (i-1)/2;
+		}
+		
 		move_down(i);
 		
 	}   
@@ -154,7 +160,7 @@ public class BinaryTreeArray implements ArrayBasedBinaryTree{
 		}
 		
 		int right = 2*idx + 2;
-		if (arr.get(left) <= arr.get(right) && arr.get(left) < arr.get(idx)) {
+		if ((arr.get(left) <= arr.get(right)) && (arr.get(left) < arr.get(idx))) {
 			swap(idx, left);
 			move_down(left);
 			return;
@@ -176,6 +182,23 @@ public class BinaryTreeArray implements ArrayBasedBinaryTree{
 	
 	public int size() {
 		return arr.size();
+	}
+	
+	public boolean isHeap() {
+		return isHeap(0);
+	}
+	private boolean isHeap(int i) {
+		if (i >= arr.size())
+			return true;
+		int left = 2*i + 1;
+		int right = 2*i + 2;
+		if (left < arr.size() && arr.get(left) < arr.get(i)) {
+			return false;
+		}
+		if (right < arr.size() && arr.get(right) < arr.get(i)) {
+			return false;
+		}
+		return isHeap(left) && isHeap(right);
 	}
 }
 

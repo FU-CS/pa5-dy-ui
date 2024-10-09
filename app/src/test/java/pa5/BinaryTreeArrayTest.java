@@ -36,8 +36,10 @@ import java.util.Random;
     	 assertEquals("1 2 5 4", tree.levelOrder());
     	 tree.delete(90);
     	 assertEquals("1 2 5 4", tree.levelOrder()); // removing element that doesnt exist
-    	 tree.delete(4);
-//    	 System.out.print(tree.levelOrder());
+    	 tree.delete(4); //removing last element
+    	 assertEquals("1 2 5", tree.levelOrder());
+    	 tree.delete(1); //removing first element
+    	 assertEquals("2 5", tree.levelOrder());
      }
      
      
@@ -45,29 +47,18 @@ import java.util.Random;
      void testDeleteInsertGeneral() { // randomized general test
     	 BinaryTreeArray tree = new BinaryTreeArray(10);
     	 Random rand = new Random();
-    	 for (int i=0; i < 1000; i++) {
+    	 for (int i=0; i < 10000; i++) {
     		 tree.insert(rand.nextInt(10000));
     	 }
     	 
-    	 for (int i=0; i < 1000; i++) {
-    		 int idx = rand.nextInt(1000);
-    		 if (2*idx +1 < 1000)
-    			 assertEquals(true, tree.get(idx) <= tree.get(2*idx+1));
-    		 if (2*idx +2 < 1000)
-    			 assertEquals(true, tree.get(idx) <= tree.get(2*idx+2));
-    	 }
+    	 assertEquals(true, tree.isHeap());
     	 
-    	 for (int i=0; i < 10; i++) {
+    	 for (int i=0; i < 1000; i++) {
+    		 int initial = tree.size();
+    		 int val = rand.nextInt(10000);
     		 tree.delete(rand.nextInt(10000));
+    		 assertEquals(true, tree.isHeap());
     	 }
-    	 
-    	 for (int i=0; i < 1000; i++) {
-    		 int idx = rand.nextInt(1000);
-    		 if (2*idx +1 < tree.size())
-    			 assertEquals(true, tree.get(idx) <= tree.get(2*idx+1));
-    		 if (2*idx +2 < tree.size())
-    			 assertEquals(true, tree.get(idx) <= tree.get(2*idx+2));
-    	 } 
     	 
      }
      
@@ -103,6 +94,23 @@ import java.util.Random;
          tree.insert(5);
          assertEquals("4 5 2 3 1 ", tree.postOrder());
      }
+     
+     @Test
+     void longestPathTest() {
+    	 BinaryTreeArray tree = new BinaryTreeArray(10);
+    	 assertEquals(0, tree.longestPath()); //testing empty heap
+    	 tree.insert(1);
+    	 assertEquals(1, tree.longestPath()); //testing with one element
+         tree.insert(2);
+         assertEquals(2, tree.longestPath());
+         tree.insert(3); //testing 1 less than a power of 2
+         assertEquals(2, tree.longestPath());
+         tree.insert(4); //testing a power of 2
+         assertEquals(3, tree.longestPath());
+         tree.insert(5);
+         assertEquals(3, tree.longestPath());
+     }
+     
  }
  
  
