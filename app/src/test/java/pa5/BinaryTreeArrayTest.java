@@ -6,20 +6,106 @@ package pa5;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-// class BinaryTreeArrayTest {
-//     @Test
-//     void testInsert(){
-//         BinaryTreeArray tree = new BinaryTreeArray(10);
-//         tree.insert(1);
-//         tree.insert(2);
-//         tree.insert(3);
-//         tree.insert(4);
-//         tree.insert(5);
-//         tree.insert(6);
-//         tree.insert(7);
-//         tree.insert(8);
-//         tree.insert(9);
-//         tree.insert(10);
-//         assertEquals("1 2 3 4 5 6 7 8 9 10", tree.levelOrder());
-//     }
-// }
+import java.util.Random;
+
+ class BinaryTreeArrayTest {
+     @Test
+     void testInsert(){
+         BinaryTreeArray tree = new BinaryTreeArray(10);
+         tree.insert(1);
+         tree.insert(2);
+         tree.insert(3);
+         tree.insert(4);
+         tree.insert(5);
+         tree.insert(6);
+         tree.insert(7);
+         tree.insert(8);
+         tree.insert(9);
+         tree.insert(10);
+         assertEquals("1 2 3 4 5 6 7 8 9 10", tree.levelOrder());
+     }
+     
+     @Test
+     void testDelete() {
+    	 BinaryTreeArray tree = new BinaryTreeArray(10);
+    	 for (int i = 1; i < 6; i++)
+    		 tree.insert(i);
+    	 
+    	 assertEquals("1 2 3 4 5", tree.levelOrder());
+    	 tree.delete(3);
+    	 assertEquals("1 2 5 4", tree.levelOrder());
+    	 tree.delete(90);
+    	 assertEquals("1 2 5 4", tree.levelOrder()); // removing element that doesnt exist
+    	 tree.delete(4);
+//    	 System.out.print(tree.levelOrder());
+     }
+     
+     
+     @Test
+     void testDeleteInsertGeneral() { // randomized general test
+    	 BinaryTreeArray tree = new BinaryTreeArray(10);
+    	 Random rand = new Random();
+    	 for (int i=0; i < 1000; i++) {
+    		 tree.insert(rand.nextInt(10000));
+    	 }
+    	 
+    	 for (int i=0; i < 1000; i++) {
+    		 int idx = rand.nextInt(1000);
+    		 if (2*idx +1 < 1000)
+    			 assertEquals(true, tree.get(idx) <= tree.get(2*idx+1));
+    		 if (2*idx +2 < 1000)
+    			 assertEquals(true, tree.get(idx) <= tree.get(2*idx+2));
+    	 }
+    	 
+    	 for (int i=0; i < 10; i++) {
+    		 tree.delete(rand.nextInt(10000));
+    	 }
+    	 
+    	 for (int i=0; i < 1000; i++) {
+    		 int idx = rand.nextInt(1000);
+    		 if (2*idx +1 < tree.size())
+    			 assertEquals(true, tree.get(idx) <= tree.get(2*idx+1));
+    		 if (2*idx +2 < tree.size())
+    			 assertEquals(true, tree.get(idx) <= tree.get(2*idx+2));
+    	 } 
+    	 
+     }
+     
+     @Test
+     void inOrderTest() {
+    	 BinaryTreeArray tree = new BinaryTreeArray(10);
+    	 tree.insert(1);
+         tree.insert(2);
+         tree.insert(3);
+         tree.insert(4);
+         tree.insert(5);
+         assertEquals("4 2 5 1 3 ", tree.inOrder());
+     }
+     
+     @Test
+     void preOrderTest() {
+    	 BinaryTreeArray tree = new BinaryTreeArray(10);
+    	 tree.insert(1);
+         tree.insert(2);
+         tree.insert(3);
+         tree.insert(4);
+         tree.insert(5);
+         assertEquals("1 2 4 5 3 ", tree.preOrder());
+     }
+     
+     @Test
+     void postOrderTest() {
+    	 BinaryTreeArray tree = new BinaryTreeArray(10);
+    	 tree.insert(1);
+         tree.insert(2);
+         tree.insert(3);
+         tree.insert(4);
+         tree.insert(5);
+         assertEquals("4 5 2 3 1 ", tree.postOrder());
+     }
+ }
+ 
+ 
+ 
+ 
+ 
